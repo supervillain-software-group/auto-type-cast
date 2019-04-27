@@ -100,10 +100,10 @@ autoTypeCast({ __type: 'Person'}); // no conversion
 
 ## Development
 ### Testing
-- ```npm run watch```
+- ```yarn run watch```
 - Edit base code and observe test results
 
 ## Building
-- ```npm run prod``` Runs tests, lints, and builds the module
+- ```yarn run prod``` Runs tests, lints, and builds the module
 - ```npm version patch``` (or ```minor```/```major``` etc.)
 - ```npm publish```
