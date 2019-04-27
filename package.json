@@ -31,7 +31,7 @@
     "model",
     "serialization",
     "deserialization",
-    "response",
+    "response"
   ],
   "devDependencies": {
     "@babel/core": "^7.0.1",
