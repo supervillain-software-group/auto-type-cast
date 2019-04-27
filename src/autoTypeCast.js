@@ -2,18 +2,6 @@ import { classRegistry } from './classRegistry';
 
 const TYPE_KEY_NAME = '__type';
 
-// thanks jayrowe!
-function autoTypeCastIterable(iterable, options) {
-  const iterator = iterable[Symbol.iterator]();
-  let current;
-
-  while (!(current = iterator.next()).done) {
-    autoTypeCast(current.value, options);
-  }
-
-  return iterable;
-}
-
 function autoTypeCast(obj, options = {}) {
   if (obj === null || obj === undefined) {
     return obj;
@@ -42,6 +30,18 @@ function autoTypeCast(obj, options = {}) {
   }
 
   return obj;
+}
+
+// thanks jayrowe!
+function autoTypeCastIterable(iterable, options) {
+  const iterator = iterable[Symbol.iterator]();
+  let current;
+
+  while (!(current = iterator.next()).done) {
+    autoTypeCast(current.value, options);
+  }
+
+  return iterable;
 }
 
 export default autoTypeCast;
