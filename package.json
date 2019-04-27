@@ -1,18 +1,18 @@
 {
-  "name": "convert-to-class",
+  "name": "auto-type-cast",
   "version": "0.1.0",
-  "description": "TODO",
+  "description": "Simple, lightweight type casting of JSON objects to classes. Use it on the JSON response from your server to deal with proper model classes on the frontend. No dependencies",
   "author": "Josh Jordan",
   "license": "MIT",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "TODO"
+    "url": "https://github.com/joshjordan/auto-type-cast.git"
   },
-  "main": "dist/convert-to-class.js",
-  "module": "dist/convert-to-class.js",
+  "main": "dist/auto-type-cast.js",
+  "module": "dist/auto-type-cast.js",
   "files": [
-    "dist/convert-to-class.js"
+    "dist/auto-type-cast.js"
   ],
   "scripts": {
     "build": "webpack --mode=production",
@@ -23,7 +23,15 @@
     "prod": "npm run lint && npm run test && npm run build"
   },
   "keywords": [
-    "TODO"
+    "types",
+    "cast",
+    "json",
+    "object",
+    "class",
+    "model",
+    "serialization",
+    "deserialization",
+    "response",
   ],
   "devDependencies": {
     "@babel/core": "^7.0.1",

@@ -1,6 +1,6 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const libraryName = 'convert-to-class'
+const libraryName = 'auto-type-cast'
 const outputFile = `${libraryName}.js`
 
 module.exports = {
