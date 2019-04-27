@@ -47,7 +47,7 @@ _Doesn't this mean I need to add an attribute to my JSON objects being sent from
 Fist, add the package to your project:
 
 ```
-yarn add auto-type-cast`
+yarn add auto-type-cast
 ```
 
 Next, register your model classes with `auto-type-cast`:
@@ -66,7 +66,8 @@ Make sure your server sends a `__type` attribute indicating the right class name
 
 ```
 class ApplicationSerializer < ActiveModel::Serializer
-  attribute(:__type) { model.class.name } #assumes model class on server has same name as in Javascript
+  attribute(:__type) { model.class.name }
+  #assumes model class on server has same name as in Javascript
 end
 
 class PersonSerializer < ApplicationSerializer; end
@@ -87,7 +88,8 @@ You can control the name of the attribute that specifies the class name:
 
 ```
 var myObject = { "name": "Homer", myType: 'Person' };
-autoTypeCast(myObject, { typeKey: 'myType' }); //will use myType to convert the object to instance of Person
+autoTypeCast(myObject, { typeKey: 'myType' });
+// myType was used to convert the object to instance of Person
 ```
 
 If you need more granular or dynamic control of the class registry, import it directly:
