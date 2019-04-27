@@ -11,10 +11,10 @@ Given a JSON structure that looks like this:
 ```
 var homer = {
   name: "Homer Simpson",
+  __type: "Person",
   foods: [
     { name: "Jelly", category: "donut", favorite: true, __type: "Food" }
-  ],
-  __type: "Person"
+  ]
 }
 ```
 
@@ -39,7 +39,7 @@ homer.getFavoriteFood().getFullName(); // "Jelly donut"
 
 _Does this function mutate the original objects?_ Yes, and it uses `setPrototypeOf` to do so. [Mozilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf) claims this is much slower than `Object.assign`, and also a dangerous operation. My benchmarks show the opposite, but I am actively looking for counterexamples.
 
-_Doesn't this mean I need to add an attribute to my JSON objects beng sent from the server?_ Yes. This is simple enough for my use cases. If this does not fit for you, you should find a more complex framework. For example, [class-transformer](https://www.npmjs.com/package/class-transformer) is non-intrusive through use of type decorators.
+_Doesn't this mean I need to add an attribute to my JSON objects being sent from the server?_ Yes. This is simple enough for my use cases. If this does not fit for you, you should find a more complex framework. For example, [class-transformer](https://www.npmjs.com/package/class-transformer) is non-intrusive through use of type decorators.
 
 ## Usage
 ### Installation
