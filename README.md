@@ -1,6 +1,6 @@
 ## Description
 
-Simple, lightweight type casting of JSON objects to classes. Use it on the JSON response from your server to deal with proper model classes on the frontend.
+Simple, lightweight type casting of JSON objects to classes. Use it on the JSON response from your server to so you can use proper model classes on the frontend in one function call.
 
 Your server has model classes. Your frontend has model classes. But, there isn't a great way to get instances of your Javascript model classes from the JSON objects in your responses. This package gives you an easy way to do so, without integrating with a complex Javascript framework, tying you to a specific server framework, or pulling in many dependencies (this package has none).
 
