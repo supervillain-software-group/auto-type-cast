@@ -1,0 +1,48 @@
+{
+  "name": "convert-to-class",
+  "version": "0.1.0",
+  "description": "TODO",
+  "author": "Josh Jordan",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "TODO"
+  },
+  "main": "dist/convert-to-class.js",
+  "module": "dist/convert-to-class.js",
+  "files": [
+    "dist/convert-to-class.js"
+  ],
+  "scripts": {
+    "build": "webpack --mode=production",
+    "dev": "webpack-dev-server",
+    "test": "jest --config test/jest.conf.js",
+    "lint": "eslint --ext .js src test/unit",
+    "watch": "jest --watch --config test/jest.conf.js",
+    "prod": "npm run lint && npm run test && npm run build"
+  },
+  "keywords": [
+    "TODO"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.5.0",
+    "babel-loader": "^8.0.5",
+    "eslint": "^4.15.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^5.2.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "jest": "^24.5.0",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1"
+  }
+}
