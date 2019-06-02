@@ -11,9 +11,7 @@ function autoTypeCast(obj, options = {}) {
   }
 
   if (obj.constructor.name === 'Object') {
-    Object.entries(obj).forEach(([key, value]) => {
-      autoTypeCast(value, options);
-    });
+    Object.values(obj).forEach(value => autoTypeCast(value, options));
 
     // todo: options could specify alternate or additional class registry
     const type = config.getObjectType(obj, options);

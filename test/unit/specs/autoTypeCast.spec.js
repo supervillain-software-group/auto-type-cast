@@ -1,6 +1,6 @@
 import autoTypeCast from '../../../src/autoTypeCast';
 import { registerClass } from '../../../src/classRegistry';
-import config from  '../../../src/config';
+import config from '../../../src/config';
 
 /* eslint-disable class-methods-use-this */
 class TestA { testA() { return 'testA'; }}
@@ -141,14 +141,14 @@ describe('autoTypeCast', () => {
       { nested: { __type: 'TestA', typeNameFromFn: 'TestB' } },
     ];
 
-    config.getObjectType = (object, options) => object.typeNameFromFn;
+    config.getObjectType = object => object.typeNameFromFn;
 
     autoTypeCast(objects);
 
     expect(objects[0].constructor).toEqual(Object);
     expect(objects[1].constructor).toEqual(TestA);
     expect(objects[2].nested.constructor).toEqual(TestB);
-  })
+  });
 
   test('it does not convert an object if the type is not registered', () => {
     const obj = { __type: 'TestZ' };
