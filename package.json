@@ -1,6 +1,6 @@
 {
   "name": "auto-type-cast",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Simple, lightweight type casting of JSON objects to classes. Use it on the JSON response from your server to deal with proper model classes on the frontend. No dependencies",
   "author": "Josh Jordan",
   "license": "MIT",
