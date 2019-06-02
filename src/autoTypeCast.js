@@ -1,13 +1,10 @@
 import { classRegistry } from './classRegistry';
-
-const TYPE_KEY_NAME = '__type';
+import config from './config';
 
 function autoTypeCast(obj, options = {}) {
   if (obj === null || obj === undefined) {
     return obj;
   }
-
-  const typeKey = options.typeKey || TYPE_KEY_NAME;
 
   if (typeof obj[Symbol.iterator] === 'function' && obj.constructor.name !== 'String') {
     return autoTypeCastIterable(obj, options);
@@ -15,16 +12,16 @@ function autoTypeCast(obj, options = {}) {
 
   if (obj.constructor.name === 'Object') {
     Object.entries(obj).forEach(([key, value]) => {
-      if (key === typeKey) return;
       autoTypeCast(value, options);
     });
 
     // todo: options could specify alternate or additional class registry
-    const type = classRegistry[obj[typeKey]];
-    if (type) {
+    const type = config.getObjectType(obj, options);
+    const objectClass = classRegistry[type];
+    if (objectClass) {
       // todo: options could specify before/after/around autoTypeCast
       // todo: class could specify before/after/around autoTypeCast
-      Object.setPrototypeOf(obj, type.prototype);
+      Object.setPrototypeOf(obj, objectClass.prototype);
     }
     // todo: else if has key but no type found and option is set, throw error
   }

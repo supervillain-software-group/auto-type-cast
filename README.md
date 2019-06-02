@@ -73,6 +73,8 @@ end
 class PersonSerializer < ApplicationSerializer; end
 ```
 
+Configure `autoTypeCast`. See [Configuration](#configuration) below. *Important:* See note about `getClassType` and minification.
+
 Finally, call `autoTypeCast` on the object. Arrays and deeply-nested structures will be scanned and cast as well, if found.
 
 ```
@@ -99,6 +101,20 @@ import { classRegistry } from 'auto-type-cast';
 delete classRegistry['Person'];
 autoTypeCast({ __type: 'Person'}); // no conversion
 ```
+
+### Configuration
+
+| Parameter  | Description | Default |
+| ------------- | ------------- |
+| `config.typeKey`  | Determines the attribute name that specifies the object's type  | `__type` |
+| `config.getObjectType`  | Returns the object's type. Used to look up the correct class in the registry. Uses `config.typeKey` by default, but if you need more control, you can override this | `(object, options) => { object[options.typeKey | config.typeKey]` |
+| `config.getClassType` | Returns the class's "type" name. Used to map objects to this class. The object type and the class type must match in order for `autoTypeCast` to work. | `(klass) => klass.name` |
+
+A note regarding `getClassType`: if you are uglifying/minifying/mangling your code, you are likely destroying class names in production, which will result in `autoTypeCast` being unable to find classes at runtime. You have a few options:
+
+1. Add a static name to your class, like so: `class TestClass { static get name() { return 'TestClass'} }`. This is the recommended option.
+1. Prevent the minifier from stripping out class/function names. (e.g. with `keep_fnames = true`)
+1. Override `config.getClassType` to determine the type name another way.
 
 ## Development
 ### Testing

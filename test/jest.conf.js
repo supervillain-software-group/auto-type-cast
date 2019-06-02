@@ -7,5 +7,6 @@ module.exports = {
     '^.+\\.js$': '<rootDir>/node_modules/babel-jest'
   },
   moduleNameMapper: require('../aliases.config.js').jest,
+  setupFilesAfterEnv: ['<rootDir>/test/setup/configSetup.js'],
   transformIgnorePatterns: ['<rootDir>/node_modules/']
 }
