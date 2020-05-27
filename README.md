@@ -109,6 +109,8 @@ autoTypeCast({ __type: 'Person'}); // no conversion
 | `config.typeKey` | Determines the attribute name that specifies the object's type  | `__type` |
 | `config.getObjectType`  | Returns the object's type. Used to look up the correct class in the registry. Uses `config.typeKey` by default, but if you need more control, you can override this | `(object, options) =>  object[options.typeKey \|\| config.typeKey]` |
 | `config.getClassType` | Returns the class's "type" name. Used to map objects to this class. The object type and the class type must match in order for `autoTypeCast` to work. | `(klass) => klass.name` |
+| `config.beforeTypeCast` | Called with the object as a parmeter immediately before type casting it. You can use this if you need to transform it (e.g. manipulating `__type`) before it is ready for type cast. | No-op `(object) => {}` |
+| `config.afterTypeCast` | Called with the object as a parmeter immediately after type casting it. You can use this if you need to transform it after it has taken on its new class (e.g. calling a function from the new class like `object.mySpecialInit()`) | No-op `(object) => {}` |
 
 A note regarding `getClassType`: if you are uglifying/minifying/mangling your code, you are likely destroying class names in production, which will result in `autoTypeCast` being unable to find classes at runtime. You have a few options:
 
