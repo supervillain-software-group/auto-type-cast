@@ -162,7 +162,7 @@ describe('autoTypeCast', () => {
     const obj = { myAttr: 'after beforeTypeCast', __type: 'TestA' };
     let v = 'before beforeTypeCast';
 
-    config.beforeTypeCast = (obj) => { v = obj.myAttr };
+    config.beforeTypeCast = (object) => { v = object.myAttr; };
 
     autoTypeCast(obj);
 
@@ -173,7 +173,7 @@ describe('autoTypeCast', () => {
     const obj = { myAttr: 'after afterTypeCast', __type: 'TestA' };
     let v = 'before afterTypeCast';
 
-    config.afterTypeCast = (obj) => { v = obj.myAttr };
+    config.afterTypeCast = (object) => { v = object.myAttr; };
 
     autoTypeCast(obj);
 
@@ -184,8 +184,8 @@ describe('autoTypeCast', () => {
     const obj = { myAttr: 'after beforeTypeCast', __type: 'TestA' };
     let v = 'before beforeTypeCast';
 
-    config.beforeTypeCast = (obj) => { throw new Error('should not be called'); }
-    autoTypeCast(obj, { beforeTypeCast: (obj) => { v = obj.myAttr } });
+    config.beforeTypeCast = () => { throw new Error('should not be called'); };
+    autoTypeCast(obj, { beforeTypeCast: (object) => { v = object.myAttr; } });
 
     expect(v).toEqual('after beforeTypeCast');
   });
@@ -194,8 +194,8 @@ describe('autoTypeCast', () => {
     const obj = { myAttr: 'after afterTypeCast', __type: 'TestA' };
     let v = 'before afterTypeCast';
 
-    config.afterTypeCast = (obj) => { throw new Error('should not be called'); }
-    autoTypeCast(obj, { afterTypeCast: (obj) => { v = obj.myAttr } });
+    config.afterTypeCast = () => { throw new Error('should not be called'); };
+    autoTypeCast(obj, { afterTypeCast: (object) => { v = object.myAttr; } });
 
     expect(v).toEqual('after afterTypeCast');
   });

@@ -1,3 +1,5 @@
+const NO_OP = (object) => { }; // eslint-disable-line no-unused-vars
+
 const defaultConfig = {
   typeKey: '__type',
   getObjectType: (object, options) => {
@@ -5,8 +7,8 @@ const defaultConfig = {
     return object[typeKey];
   },
   getClassType: klass => klass.name,
-  beforeTypeCast: (object) => { },
-  afterTypeCast: (object) => { },
+  beforeTypeCast: NO_OP,
+  afterTypeCast: NO_OP,
 };
 
 const config = {};

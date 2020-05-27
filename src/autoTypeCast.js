@@ -21,7 +21,7 @@ function autoTypeCast(obj, options = {}) {
       // todo: class could specify before/after/around autoTypeCast
       (options.beforeTypeCast || config.beforeTypeCast)(obj);
       Object.setPrototypeOf(obj, objectClass.prototype);
-      (options.afterTypeCast || config.afterTypeCast)(obj)
+      (options.afterTypeCast || config.afterTypeCast)(obj);
     }
     // todo: else if has key but no type found and option is set, throw error
   }
