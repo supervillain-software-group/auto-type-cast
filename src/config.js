@@ -5,6 +5,8 @@ const defaultConfig = {
     return object[typeKey];
   },
   getClassType: klass => klass.name,
+  beforeTypeCast: (object) => { },
+  afterTypeCast: (object) => { },
 };
 
 const config = {};

@@ -158,6 +158,47 @@ describe('autoTypeCast', () => {
     expect(obj.constructor).toEqual(Object);
   });
 
+  test('calls beforeTypeCast in config', () => {
+    const obj = { myAttr: 'after beforeTypeCast', __type: 'TestA' };
+    let v = 'before beforeTypeCast';
+
+    config.beforeTypeCast = (obj) => { v = obj.myAttr };
+
+    autoTypeCast(obj);
+
+    expect(v).toEqual('after beforeTypeCast');
+  });
+
+  test('calls afterTypeCast in config', () => {
+    const obj = { myAttr: 'after afterTypeCast', __type: 'TestA' };
+    let v = 'before afterTypeCast';
+
+    config.afterTypeCast = (obj) => { v = obj.myAttr };
+
+    autoTypeCast(obj);
+
+    expect(v).toEqual('after afterTypeCast');
+  });
+
+  test('calls beforeTypeCast override in option parameters', () => {
+    const obj = { myAttr: 'after beforeTypeCast', __type: 'TestA' };
+    let v = 'before beforeTypeCast';
+
+    config.beforeTypeCast = (obj) => { throw new Error('should not be called'); }
+    autoTypeCast(obj, { beforeTypeCast: (obj) => { v = obj.myAttr } });
+
+    expect(v).toEqual('after beforeTypeCast');
+  });
+
+  test('calls afterTypeCast override in option parameters', () => {
+    const obj = { myAttr: 'after afterTypeCast', __type: 'TestA' };
+    let v = 'before afterTypeCast';
+
+    config.afterTypeCast = (obj) => { throw new Error('should not be called'); }
+    autoTypeCast(obj, { afterTypeCast: (obj) => { v = obj.myAttr } });
+
+    expect(v).toEqual('after afterTypeCast');
+  });
   // todo: class does not exist in registry and option to throw is set
 
   describe('no-op types', () => {

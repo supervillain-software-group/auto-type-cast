@@ -17,9 +17,11 @@ function autoTypeCast(obj, options = {}) {
     const type = config.getObjectType(obj, options);
     const objectClass = classRegistry[type];
     if (objectClass) {
-      // todo: options could specify before/after/around autoTypeCast
+      // todo: options could specify around autoTypeCast for canceling it
       // todo: class could specify before/after/around autoTypeCast
+      (options.beforeTypeCast || config.beforeTypeCast)(obj);
       Object.setPrototypeOf(obj, objectClass.prototype);
+      (options.afterTypeCast || config.afterTypeCast)(obj)
     }
     // todo: else if has key but no type found and option is set, throw error
   }
