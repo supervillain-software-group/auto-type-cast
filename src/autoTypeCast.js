@@ -54,4 +54,3 @@ function autoTypeCastIterable(iterable, options) {
 }
 
 export { classRegistry, autoTypeCast as default };
-

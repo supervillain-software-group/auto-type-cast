@@ -12,8 +12,9 @@ describe('Transform decorator', () => {
 
   it('transforms properties using the specified function', () => {
     @Register('Person')
+    // eslint-disable-next-line no-unused-vars
     class Person {
-      @Transform(dateStr => {
+      @Transform((dateStr) => {
         const date = new Date(dateStr);
         // Ensure timezone doesn't affect the test
         date.setUTCHours(0, 0, 0, 0);
@@ -40,12 +41,14 @@ describe('Transform decorator', () => {
 
   it('handles nested objects with transformations', () => {
     @Register('Food')
+    // eslint-disable-next-line no-unused-vars
     class Food {
       @Transform(str => str.toLowerCase())
       category;
     }
 
     @Register('Person')
+    // eslint-disable-next-line no-unused-vars
     class Person {
       foods;
     }

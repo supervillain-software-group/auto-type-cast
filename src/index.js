@@ -10,6 +10,5 @@ export {
   defaultConfig,
   Register,
   registerClass,
-  Transform
+  Transform,
 };
-
