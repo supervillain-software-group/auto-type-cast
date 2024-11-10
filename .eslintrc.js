@@ -2,8 +2,13 @@
 
 module.exports = {
   root: true,
+  parser: 'babel-eslint',
   parserOptions: {
-    parser: 'babel-eslint'
+    ecmaVersion: 2018,
+    sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true
+    }
   },
   env: {
     browser: true,
@@ -16,6 +21,8 @@ module.exports = {
     'no-cond-assign': 0,
     'no-underscore-dangle': 0,
     'no-use-before-define': 0,
+    // allow decorators
+    'new-cap': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }

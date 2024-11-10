@@ -21,12 +21,14 @@ var homer = {
 and some model classes that look like this:
 
 ```
+@Register('Person')
 class Person {
   getFavoriteFood() { return this.foods.find(f => f.favorite); }
 }
 
+@Register('Food')
 class Food {
-  getFullName() { return "${this.name} ${this.category}";  }
+  getFullName() { return `${this.name} ${this.category}`; }
 }
 ```
 
@@ -45,36 +47,37 @@ _Doesn't this mean I need to add an attribute to my JSON objects being sent from
 
 ### Installation
 
-Fist, add the package to your project:
+First, add the package to your project:
 
 ```
 npm install auto-type-cast --save
 ```
 
-Next, register your model classes with `auto-type-cast`:
+Next, register your model classes using the @Register decorator:
 
 ```
-import { registerClass } from 'auto-type-cast';
+import { Register } from 'auto-type-cast';
 
+@Register('Person')
 class Person {
-  ...
+  // ... your class implementation
 }
-
-registerClass(Person);
 ```
 
-Make sure your server sends a `__type` attribute indicating the right class name to cast the object to, or augment the Javascript once you have it on the client. You're on your own with this, but here's an example from Ruby using [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers):
+The @Register decorator takes a string parameter that specifies the type name to use for this class. This is particularly useful when your class names might be minified or obfuscated in production, as it allows you to maintain a consistent type name regardless of code transformation.
+
+Make sure your server sends a `__type` attribute matching the registered name, or augment the Javascript once you have it on the client. You're on your own with this, but here's an example from Ruby using [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers):
 
 ```
 class ApplicationSerializer < ActiveModel::Serializer
   attribute(:__type) { model.class.name }
-  #assumes model class on server has same name as in Javascript
+  #assumes model class on server has same name as registered on frontend
 end
 
 class PersonSerializer < ApplicationSerializer; end
 ```
 
-Configure `autoTypeCast`. See [Configuration](#configuration) below. _Important:_ See note about `getClassType` and minification.
+Configure `autoTypeCast`. See [Configuration](#configuration) below.
 
 Finally, call `autoTypeCast` on the object. Arrays and deeply-nested structures will be scanned and cast as well, if found.
 
@@ -83,6 +86,20 @@ import autoTypeCast from 'auto-type-cast';
 
 var response = fetch(...);
 autoTypeCast(response.data);
+```
+
+### Alternative Registration Methods
+
+While using the @Register decorator is the recommended approach, you can also register classes manually:
+
+```
+import { registerClass } from 'auto-type-cast';
+
+class Person {
+  // ... your class implementation
+}
+
+registerClass(Person);  // Will use the class name as the type
 ```
 
 ### Customization
@@ -109,15 +126,9 @@ autoTypeCast({ __type: 'Person'}); // no conversion
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | `config.typeKey`        | Determines the attribute name that specifies the object's type                                                                                                                                                                      | `__type`                                                            |
 | `config.getObjectType`  | Returns the object's type. Used to look up the correct class in the registry. Uses `config.typeKey` by default, but if you need more control, you can override this                                                                 | `(object, options) =>  object[options.typeKey \|\| config.typeKey]` |
-| `config.getClassType`   | Returns the class's "type" name. Used to map objects to this class. The object type and the class type must match in order for `autoTypeCast` to work.                                                                              | `(klass) => klass.name`                                             |
+| `config.getClassType`   | Returns the class's "type" name. Used to map objects to this class. The object type and the class type must match in order for `autoTypeCast` to work.                                                                              | `(klass) => klass.registeredName \|\| klass.name`                   |
 | `config.beforeTypeCast` | Called with the object as a parmeter immediately before type casting it. You can use this if you need to transform it (e.g. manipulating `__type`) before it is ready for type cast.                                                | No-op `(object) => {}`                                              |
 | `config.afterTypeCast`  | Called with the object as a parmeter immediately after type casting it. You can use this if you need to transform it after it has taken on its new class (e.g. calling a function from the new class like `object.mySpecialInit()`) | No-op `(object) => {}`                                              |
-
-A note regarding `getClassType`: if you are uglifying/minifying/mangling your code, you are likely destroying class names in production, which will result in `autoTypeCast` being unable to find classes at runtime. You have a few options:
-
-1. Add a static name to your class, like so: `class TestClass { static get name() { return 'TestClass'} }`. This is the recommended option.
-1. Prevent the minifier from stripping out class/function names. (e.g. with `keep_fnames = true`)
-1. Override `config.getClassType` to determine the type name another way.
 
 ## Development
 

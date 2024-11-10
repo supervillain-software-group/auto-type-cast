@@ -6,7 +6,7 @@ const defaultConfig = {
     const typeKey = options.typeKey || config.typeKey;
     return object[typeKey];
   },
-  getClassType: klass => klass.name,
+  getClassType: klass => klass.registeredName || klass.name,
   beforeTypeCast: NO_OP,
   afterTypeCast: NO_OP,
 };

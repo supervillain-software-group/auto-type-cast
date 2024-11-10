@@ -1,5 +1,6 @@
 import { classRegistry, registerClass } from '../../../src/classRegistry';
 import config from '../../../src/config';
+import Register from '../../../src/decorators';
 
 describe('classRegistry', () => {
   test('object exists', () => {
@@ -8,6 +9,11 @@ describe('classRegistry', () => {
 });
 
 describe('registerClass', () => {
+  beforeEach(() => {
+    // Clear registry before each test
+    Object.keys(classRegistry).forEach(key => delete classRegistry[key]);
+  });
+
   test('adds a class to the registry by its name', () => {
     class TestRegisterClass {}
 
@@ -27,9 +33,34 @@ describe('registerClass', () => {
   test('adds a class to the registry by custom function', () => {
     class TestCustomFnClass { static typeName() { return 'CustomFn'; } }
 
+    const originalGetClassType = config.getClassType;
     config.getClassType = klass => klass.typeName();
     registerClass(TestCustomFnClass);
+    config.getClassType = originalGetClassType;
 
     expect(classRegistry.CustomFn).toEqual(TestCustomFnClass);
+  });
+});
+
+describe('Register decorator', () => {
+  beforeEach(() => {
+    // Clear registry before each test
+    Object.keys(classRegistry).forEach(key => delete classRegistry[key]);
+  });
+
+  test('registers class with custom name using decorator', () => {
+    @Register('CustomPerson')
+    class Person {}
+
+    expect(classRegistry.CustomPerson).toEqual(Person);
+    expect(Person.registeredName).toBe('CustomPerson');
+  });
+
+  test('registered name takes precedence over class name', () => {
+    @Register('CustomName')
+    class TestClass { static get name() { return 'ClassName'; } }
+
+    expect(classRegistry.CustomName).toEqual(TestClass);
+    expect(classRegistry.ClassName).toBeUndefined();
   });
 });
