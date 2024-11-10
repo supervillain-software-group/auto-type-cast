@@ -4,11 +4,4 @@ import config, { defaultConfig } from './config';
 import { Register, Transform } from './decorators';
 
 export default autoTypeCast;
-export {
-  classRegistry,
-  config,
-  defaultConfig,
-  Register,
-  registerClass,
-  Transform,
-};
+export { classRegistry, config, defaultConfig, Register, registerClass, Transform };

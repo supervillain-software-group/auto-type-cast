@@ -2,6 +2,7 @@
   "env": {
     "jest": true
   },
-  "globals": {
+  "rules": {
+    "max-classes-per-file": "off"
   }
 }

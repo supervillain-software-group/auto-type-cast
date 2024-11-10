@@ -6,8 +6,8 @@ import { transformRegistry } from '../../../src/transformRegistry';
 describe('Transform decorator', () => {
   beforeEach(() => {
     // Clear registries before each test
-    Object.keys(classRegistry).forEach(key => delete classRegistry[key]);
-    Object.keys(transformRegistry).forEach(key => delete transformRegistry[key]);
+    Object.keys(classRegistry).forEach((key) => delete classRegistry[key]);
+    Object.keys(transformRegistry).forEach((key) => delete transformRegistry[key]);
   });
 
   it('transforms properties using the specified function', () => {
@@ -22,7 +22,7 @@ describe('Transform decorator', () => {
       })
       birthDate;
 
-      @Transform(str => str.toUpperCase())
+      @Transform((str) => str.toUpperCase())
       name;
     }
 
@@ -43,7 +43,7 @@ describe('Transform decorator', () => {
     @Register('Food')
     // eslint-disable-next-line no-unused-vars
     class Food {
-      @Transform(str => str.toLowerCase())
+      @Transform((str) => str.toLowerCase())
       category;
     }
 

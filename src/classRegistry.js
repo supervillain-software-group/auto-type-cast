@@ -1,6 +1,6 @@
 import config from './config';
 
-const classRegistry = { };
+const classRegistry = {};
 
 const registerClass = (c) => {
   const type = config.getClassType(c);

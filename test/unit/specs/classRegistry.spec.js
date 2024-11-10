@@ -11,7 +11,7 @@ describe('classRegistry', () => {
 describe('registerClass', () => {
   beforeEach(() => {
     // Clear registry before each test
-    Object.keys(classRegistry).forEach(key => delete classRegistry[key]);
+    Object.keys(classRegistry).forEach((key) => delete classRegistry[key]);
   });
 
   test('adds a class to the registry by its name', () => {
@@ -23,7 +23,11 @@ describe('registerClass', () => {
   });
 
   test('adds a class to registry when name is overridden', () => {
-    class TestCustomNameClass { static get name() { return 'CustomName'; } }
+    class TestCustomNameClass {
+      static get name() {
+        return 'CustomName';
+      }
+    }
 
     registerClass(TestCustomNameClass);
 
@@ -31,10 +35,14 @@ describe('registerClass', () => {
   });
 
   test('adds a class to the registry by custom function', () => {
-    class TestCustomFnClass { static typeName() { return 'CustomFn'; } }
+    class TestCustomFnClass {
+      static typeName() {
+        return 'CustomFn';
+      }
+    }
 
     const originalGetClassType = config.getClassType;
-    config.getClassType = klass => klass.typeName();
+    config.getClassType = (klass) => klass.typeName();
     registerClass(TestCustomFnClass);
     config.getClassType = originalGetClassType;
 
@@ -45,7 +53,7 @@ describe('registerClass', () => {
 describe('Register decorator', () => {
   beforeEach(() => {
     // Clear registry before each test
-    Object.keys(classRegistry).forEach(key => delete classRegistry[key]);
+    Object.keys(classRegistry).forEach((key) => delete classRegistry[key]);
   });
 
   test('registers class with custom name using decorator', () => {
@@ -58,7 +66,11 @@ describe('Register decorator', () => {
 
   test('registered name takes precedence over class name', () => {
     @Register('CustomName')
-    class TestClass { static get name() { return 'ClassName'; } }
+    class TestClass {
+      static get name() {
+        return 'ClassName';
+      }
+    }
 
     expect(classRegistry.CustomName).toEqual(TestClass);
     expect(classRegistry.ClassName).toBeUndefined();

@@ -3,8 +3,16 @@ import { registerClass } from '../../../src/classRegistry';
 import config from '../../../src/config';
 
 /* eslint-disable class-methods-use-this */
-class TestA { testA() { return 'testA'; }}
-class TestB { testB() { return 'testB'; }}
+class TestA {
+  testA() {
+    return 'testA';
+  }
+}
+class TestB {
+  testB() {
+    return 'testB';
+  }
+}
 /* eslint-enable class-methods-use-this */
 beforeEach(() => {
   registerClass(TestA);
@@ -141,7 +149,7 @@ describe('autoTypeCast', () => {
       { nested: { __type: 'TestA', typeNameFromFn: 'TestB' } },
     ];
 
-    config.getObjectType = object => object.typeNameFromFn;
+    config.getObjectType = (object) => object.typeNameFromFn;
 
     autoTypeCast(objects);
 
@@ -162,7 +170,9 @@ describe('autoTypeCast', () => {
     const obj = { myAttr: 'after beforeTypeCast', __type: 'TestA' };
     let v = 'before beforeTypeCast';
 
-    config.beforeTypeCast = (object) => { v = object.myAttr; };
+    config.beforeTypeCast = (object) => {
+      v = object.myAttr;
+    };
 
     autoTypeCast(obj);
 
@@ -173,7 +183,9 @@ describe('autoTypeCast', () => {
     const obj = { myAttr: 'after afterTypeCast', __type: 'TestA' };
     let v = 'before afterTypeCast';
 
-    config.afterTypeCast = (object) => { v = object.myAttr; };
+    config.afterTypeCast = (object) => {
+      v = object.myAttr;
+    };
 
     autoTypeCast(obj);
 
@@ -184,8 +196,14 @@ describe('autoTypeCast', () => {
     const obj = { myAttr: 'after beforeTypeCast', __type: 'TestA' };
     let v = 'before beforeTypeCast';
 
-    config.beforeTypeCast = () => { throw new Error('should not be called'); };
-    autoTypeCast(obj, { beforeTypeCast: (object) => { v = object.myAttr; } });
+    config.beforeTypeCast = () => {
+      throw new Error('should not be called');
+    };
+    autoTypeCast(obj, {
+      beforeTypeCast: (object) => {
+        v = object.myAttr;
+      },
+    });
 
     expect(v).toEqual('after beforeTypeCast');
   });
@@ -194,8 +212,14 @@ describe('autoTypeCast', () => {
     const obj = { myAttr: 'after afterTypeCast', __type: 'TestA' };
     let v = 'before afterTypeCast';
 
-    config.afterTypeCast = () => { throw new Error('should not be called'); };
-    autoTypeCast(obj, { afterTypeCast: (object) => { v = object.myAttr; } });
+    config.afterTypeCast = () => {
+      throw new Error('should not be called');
+    };
+    autoTypeCast(obj, {
+      afterTypeCast: (object) => {
+        v = object.myAttr;
+      },
+    });
 
     expect(v).toEqual('after afterTypeCast');
   });

@@ -19,10 +19,13 @@ module.exports = {
     node: true
   },
   extends: [
-    "airbnb-base"
+    'airbnb-base',
+    'plugin:prettier/recommended'
   ],
+  plugins: ['prettier'],
   // add your custom rules here
   rules: {
+    'prettier/prettier': 'error',
     'no-cond-assign': 0,
     'no-underscore-dangle': 0,
     'no-use-before-define': 0,
