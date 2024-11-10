@@ -1,6 +1,6 @@
 import { classRegistry, registerClass } from '../../../src/classRegistry';
 import config from '../../../src/config';
-import Register from '../../../src/decorators';
+import { Register } from '../../../src/decorators';
 
 describe('classRegistry', () => {
   test('object exists', () => {

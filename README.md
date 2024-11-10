@@ -102,6 +102,41 @@ class Person {
 registerClass(Person);  // Will use the class name as the type
 ```
 
+### Property Transformations
+
+You can use the @Transform decorator to automatically transform property values during type casting. This is particularly useful for converting date strings to Date objects, formatting strings, or transforming nested data structures:
+
+```
+import { Register, Transform } from 'auto-type-cast';
+
+@Register('Person')
+class Person {
+  @Transform(date => new Date(date))
+  birthDate;
+
+  @Transform(str => str.toUpperCase())
+  name;
+
+  // Transform can also handle nested objects
+  @Transform(foods => foods.map(f => ({ ...f, __type: 'Food' })))
+  foods;
+}
+
+const data = {
+  __type: 'Person',
+  birthDate: '1990-01-01',
+  name: 'Homer Simpson',
+  foods: [{ category: 'DONUT', name: 'Jelly' }]
+};
+
+autoTypeCast(data);
+// data.birthDate is now a Date object (1990-01-01)
+// data.name is now 'HOMER SIMPSON'
+// data.foods[0] will be cast to Food class
+```
+
+The Transform decorator takes a function that receives the property's value and returns the transformed value. The transformation is applied during the type casting process, after the object's prototype is set but before any afterTypeCast hooks are called.
+
 ### Customization
 
 You can control the name of the attribute that specifies the class name:

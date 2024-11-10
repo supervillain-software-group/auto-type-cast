@@ -1,4 +1,5 @@
 import { registerClass } from './classRegistry';
+import { registerTransform } from './transformRegistry';
 
 const Register = name => function decorator(target) {
   // Store the registration name on the class
@@ -14,4 +15,9 @@ const Register = name => function decorator(target) {
   return target;
 };
 
-export default Register;
+const Transform = transformFn => function decorator(target, propertyKey) {
+  // Register the transformation function for this property
+  registerTransform(target, propertyKey, transformFn);
+};
+
+export { Register, Transform };

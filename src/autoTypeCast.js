@@ -1,5 +1,6 @@
 import { classRegistry } from './classRegistry';
 import config from './config';
+import { getTransforms } from './transformRegistry';
 
 function autoTypeCast(obj, options = {}) {
   if (obj === null || obj === undefined) {
@@ -21,6 +22,17 @@ function autoTypeCast(obj, options = {}) {
       // todo: class could specify before/after/around autoTypeCast
       (options.beforeTypeCast || config.beforeTypeCast)(obj);
       Object.setPrototypeOf(obj, objectClass.prototype);
+
+      // Apply any registered transformations
+      const transforms = getTransforms(type);
+      const transformedProps = {};
+      Object.entries(transforms).forEach(([prop, transformFn]) => {
+        if (obj[prop] !== undefined) {
+          transformedProps[prop] = transformFn(obj[prop]);
+        }
+      });
+      Object.assign(obj, transformedProps);
+
       (options.afterTypeCast || config.afterTypeCast)(obj);
     }
     // todo: else if has key but no type found and option is set, throw error
@@ -29,7 +41,7 @@ function autoTypeCast(obj, options = {}) {
   return obj;
 }
 
-// thanks jayrowe!
+// thanks @jayrowe!
 function autoTypeCastIterable(iterable, options) {
   const iterator = iterable[Symbol.iterator]();
   let current;
@@ -41,5 +53,5 @@ function autoTypeCastIterable(iterable, options) {
   return iterable;
 }
 
-export default autoTypeCast;
-export { classRegistry };
+export { classRegistry, autoTypeCast as default };
+
