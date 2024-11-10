@@ -7,7 +7,7 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/joshjordan/auto-type-cast.git"
+    "url": "git+https://github.com/joshjordan/auto-type-cast.git"
   },
   "main": "dist/auto-type-cast.js",
   "module": "dist/auto-type-cast.js",
