@@ -1,5 +1,6 @@
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const libraryName = 'auto-type-cast'
 const outputFile = `${libraryName}.js`
 
@@ -13,31 +14,41 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     library: libraryName,
     libraryTarget: 'umd',
-    umdNamedDefine: true
+    umdNamedDefine: true,
+    globalObject: 'this'
   },
   resolve: {
     alias: require('./aliases.config.js').webpack
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    open: 'Google Chrome',
-    openPage: `${libraryName}`,
+    static: {
+      directory: path.join(__dirname, 'dist')
+    },
+    open: true,
     hot: true
   },
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        sourceMap: true
+      new TerserPlugin({
+        terserOptions: {
+          sourceMap: true
+        }
       })
     ]
   },
+  plugins: [
+    new ESLintPlugin({
+      extensions: ['js'],
+      exclude: 'node_modules'
+    })
+  ],
   module: {
     rules: [{
-        test: /\.js/,
-        exclude: /(node_modules)/,
-        use: [{
-            loader: 'babel-loader'
-        }]
+      test: /\.js$/,
+      exclude: /(node_modules)/,
+      use: [{
+        loader: 'babel-loader'
+      }]
     }]
   }
 };
