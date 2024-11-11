@@ -27,7 +27,7 @@ function autoTypeCast(obj, options = {}) {
       const transforms = getTransforms(type);
       const transformedProps = {};
       Object.entries(transforms).forEach(([prop, transformFn]) => {
-        if (obj[prop] !== undefined) {
+        if (obj[prop] !== undefined && obj[prop] !== null) {
           transformedProps[prop] = transformFn(obj[prop]);
         }
       });

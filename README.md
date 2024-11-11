@@ -53,7 +53,7 @@ First, add the package to your project:
 npm install auto-type-cast --save
 ```
 
-Next, register your model classes using the @Register decorator:
+Next, register your model classes using the `@Register` decorator:
 
 ```
 import { Register } from 'auto-type-cast';
@@ -64,7 +64,7 @@ class Person {
 }
 ```
 
-The @Register decorator takes a string parameter that specifies the type name to use for this class. This is particularly useful when your class names might be minified or obfuscated in production, as it allows you to maintain a consistent type name regardless of code transformation.
+The `@Register` decorator takes a string parameter that specifies the type name to use for this class. This is particularly useful when your class names might be minified or obfuscated in production, as it allows you to maintain a consistent type name regardless of code transformation.
 
 Make sure your server sends a `__type` attribute matching the registered name, or augment the Javascript once you have it on the client. You're on your own with this, but here's an example from Ruby using [ActiveModelSerializers](https://github.com/rails-api/active_model_serializers):
 
@@ -90,7 +90,7 @@ autoTypeCast(response.data);
 
 ### Alternative Registration Methods
 
-While using the @Register decorator is the recommended approach, you can also register classes manually:
+While using the `@Register` decorator is the recommended approach, you can also register classes manually:
 
 ```
 import { registerClass } from 'auto-type-cast';
@@ -104,7 +104,7 @@ registerClass(Person);  // Will use the class name as the type
 
 ### Property Transformations
 
-You can use the @Transform decorator to automatically transform property values during type casting. This is particularly useful for converting date strings to Date objects, formatting strings, or transforming nested data structures:
+You can use the `@Transform` decorator to automatically transform property values during type casting. This is particularly useful for converting date strings to Date objects, formatting strings, or transforming nested data structures:
 
 ```
 import { Register, Transform } from 'auto-type-cast';
@@ -116,23 +116,17 @@ class Person {
 
   @Transform(str => str.toUpperCase())
   name;
-
-  // Transform can also handle nested objects
-  @Transform(foods => foods.map(f => ({ ...f, __type: 'Food' })))
-  foods;
 }
 
 const data = {
   __type: 'Person',
   birthDate: '1990-01-01',
   name: 'Homer Simpson',
-  foods: [{ category: 'DONUT', name: 'Jelly' }]
 };
 
 autoTypeCast(data);
 // data.birthDate is now a Date object (1990-01-01)
 // data.name is now 'HOMER SIMPSON'
-// data.foods[0] will be cast to Food class
 ```
 
 The Transform decorator takes a function that receives the property's value and returns the transformed value. The transformation is applied during the type casting process, after the object's prototype is set but before any afterTypeCast hooks are called.

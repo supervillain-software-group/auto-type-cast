@@ -66,4 +66,39 @@ describe('Transform decorator', () => {
     expect(data.foods[0].category).toBe('donut');
     expect(data.foods[1].category).toBe('pizza');
   });
+
+  it('should not call transform for null or undefined values', () => {
+    let transformCalled = false;
+
+    @Register('Person')
+    // eslint-disable-next-line no-unused-vars
+    class Person {
+      @Transform((value) => {
+        transformCalled = true;
+        return value;
+      })
+      name;
+
+      @Transform((value) => {
+        transformCalled = true;
+        return value;
+      })
+      age;
+    }
+
+    const data = {
+      __type: 'Person',
+      name: null,
+      age: undefined
+    };
+
+    autoTypeCast(data);
+
+    // Transform function should not be called for either null or undefined
+    expect(transformCalled).toBe(false);
+    
+    // Values should remain unchanged
+    expect(data.name).toBe(null);
+    expect(data.age).toBe(undefined);
+  });
 });
