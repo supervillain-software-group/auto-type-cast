@@ -28,7 +28,20 @@ function autoTypeCast(obj, options = {}) {
       const transformedProps = {};
       Object.entries(transforms).forEach(([prop, transformFn]) => {
         if (obj[prop] !== undefined && obj[prop] !== null) {
-          transformedProps[prop] = transformFn(obj[prop]);
+          try {
+            transformedProps[prop] = transformFn(obj[prop]);
+          } catch (error) {
+            // Call global error handler if configured
+            (options.onTransformError || config.onTransformError)?.(
+              error,
+              prop,
+              obj[prop],
+              transformFn,
+              type
+            );
+            // Preserve original value on transform error
+            transformedProps[prop] = obj[prop];
+          }
         }
       });
       Object.assign(obj, transformedProps);

@@ -131,6 +131,53 @@ autoTypeCast(data);
 
 The Transform decorator takes a function that receives the property's value and returns the transformed value. The transformation is applied during the type casting process, after the object's prototype is set but before any afterTypeCast hooks are called.
 
+#### Transform Error Handling
+
+Transform functions are executed in a safe manner - if a transform throws an error, the original value is preserved and the type casting process continues. This ensures that your application won't break even if a transform fails:
+
+```javascript
+@Register("User")
+class User {
+  @Transform((value) => new Date(value)) // If this fails, original string is kept
+  createdAt;
+
+  @Transform((str) => str.toUpperCase()) // This will still run even if createdAt transform failed
+  name;
+}
+```
+
+You can configure how transform errors are handled either globally or per-call:
+
+```javascript
+// Global error handling configuration
+import config from "auto-type-cast/config";
+
+config.onTransformError = (error, propertyKey, value, transformFn, type) => {
+  ErrorMonitoring.capture(error, {
+    context: {
+      type, // The class type (e.g., 'User')
+      property: propertyKey, // The property that failed (e.g., 'createdAt')
+      value, // The original value that caused the error
+    },
+  });
+};
+
+// Per-call error handling
+autoTypeCast(data, {
+  onTransformError: (error, propertyKey, value, transformFn, type) => {
+    console.warn(`Transform failed for ${type}.${propertyKey}:`, error);
+  },
+});
+```
+
+The error handler receives:
+
+- `error`: The error that was thrown
+- `propertyKey`: The name of the property being transformed
+- `value`: The original value that caused the error
+- `transformFn`: The transform function that failed
+- `type`: The class type name
+
 ### Customization
 
 You can control the name of the attribute that specifies the class name:
@@ -151,13 +198,14 @@ autoTypeCast({ __type: 'Person'}); // no conversion
 
 ### Configuration
 
-| Parameter               | Description                                                                                                                                                                                                                         | Default                                                             |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `config.typeKey`        | Determines the attribute name that specifies the object's type                                                                                                                                                                      | `__type`                                                            |
-| `config.getObjectType`  | Returns the object's type. Used to look up the correct class in the registry. Uses `config.typeKey` by default, but if you need more control, you can override this                                                                 | `(object, options) =>  object[options.typeKey \|\| config.typeKey]` |
-| `config.getClassType`   | Returns the class's "type" name. Used to map objects to this class. The object type and the class type must match in order for `autoTypeCast` to work.                                                                              | `(klass) => klass.registeredName \|\| klass.name`                   |
-| `config.beforeTypeCast` | Called with the object as a parmeter immediately before type casting it. You can use this if you need to transform it (e.g. manipulating `__type`) before it is ready for type cast.                                                | No-op `(object) => {}`                                              |
-| `config.afterTypeCast`  | Called with the object as a parmeter immediately after type casting it. You can use this if you need to transform it after it has taken on its new class (e.g. calling a function from the new class like `object.mySpecialInit()`) | No-op `(object) => {}`                                              |
+| Parameter                 | Description                                                                                                                                                                                                                         | Default                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `config.typeKey`          | Determines the attribute name that specifies the object's type                                                                                                                                                                      | `__type`                                                            |
+| `config.getObjectType`    | Returns the object's type. Used to look up the correct class in the registry. Uses `config.typeKey` by default, but if you need more control, you can override this                                                                 | `(object, options) =>  object[options.typeKey \|\| config.typeKey]` |
+| `config.getClassType`     | Returns the class's "type" name. Used to map objects to this class. The object type and the class type must match in order for `autoTypeCast` to work.                                                                              | `(klass) => klass.registeredName \|\| klass.name`                   |
+| `config.beforeTypeCast`   | Called with the object as a parmeter immediately before type casting it. You can use this if you need to transform it (e.g. manipulating `__type`) before it is ready for type cast.                                                | No-op `(object) => {}`                                              |
+| `config.afterTypeCast`    | Called with the object as a parmeter immediately after type casting it. You can use this if you need to transform it after it has taken on its new class (e.g. calling a function from the new class like `object.mySpecialInit()`) | No-op `(object) => {}`                                              |
+| `config.onTransformError` | Called when a transform function throws an error. Receives the error, property key, original value, transform function, and class type.                                                                                             | Logs warning and preserves original value                           |
 
 ## Development
 
