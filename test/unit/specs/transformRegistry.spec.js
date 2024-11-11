@@ -90,14 +90,14 @@ describe('Transform decorator', () => {
     const data = {
       __type: 'Person',
       name: null,
-      age: undefined
+      age: undefined,
     };
 
     autoTypeCast(data);
 
     // Transform function should not be called for either null or undefined
     expect(transformCalled).toBe(false);
-    
+
     // Values should remain unchanged
     expect(data.name).toBe(null);
     expect(data.age).toBe(undefined);
@@ -117,20 +117,21 @@ describe('Transform decorator', () => {
 
     it('preserves original value when transform fails', () => {
       @Register('User')
+      // eslint-disable-next-line no-unused-vars
       class User {
         @Transform(() => {
           throw new Error('Transform failed');
         })
         createdAt;
 
-        @Transform(str => str.toUpperCase())
+        @Transform((str) => str.toUpperCase())
         name;
       }
 
       const data = {
         __type: 'User',
         createdAt: '2023-01-01',
-        name: 'test'
+        name: 'test',
       };
 
       autoTypeCast(data);
@@ -148,6 +149,7 @@ describe('Transform decorator', () => {
       };
 
       @Register('User')
+      // eslint-disable-next-line no-unused-vars
       class User {
         @Transform(() => {
           throw new Error('Transform failed');
@@ -157,7 +159,7 @@ describe('Transform decorator', () => {
 
       const data = {
         __type: 'User',
-        createdAt: '2023-01-01'
+        createdAt: '2023-01-01',
       };
 
       autoTypeCast(data);
@@ -178,6 +180,7 @@ describe('Transform decorator', () => {
       };
 
       @Register('User')
+      // eslint-disable-next-line no-unused-vars
       class User {
         @Transform(() => {
           throw new Error('Transform failed');
@@ -187,13 +190,13 @@ describe('Transform decorator', () => {
 
       const data = {
         __type: 'User',
-        createdAt: '2023-01-01'
+        createdAt: '2023-01-01',
       };
 
       autoTypeCast(data, {
         onTransformError: () => {
           perCallCalled = true;
-        }
+        },
       });
 
       expect(globalCalled).toBe(false);
@@ -202,6 +205,7 @@ describe('Transform decorator', () => {
 
     it('continues type casting after transform error', () => {
       @Register('User')
+      // eslint-disable-next-line no-unused-vars
       class User {
         @Transform(() => {
           throw new Error('First transform failed');
@@ -213,7 +217,7 @@ describe('Transform decorator', () => {
         })
         second;
 
-        @Transform(str => str.toUpperCase())
+        @Transform((str) => str.toUpperCase())
         third;
       }
 
@@ -221,7 +225,7 @@ describe('Transform decorator', () => {
         __type: 'User',
         first: 'one',
         second: 'two',
-        third: 'three'
+        third: 'three',
       };
 
       autoTypeCast(data);

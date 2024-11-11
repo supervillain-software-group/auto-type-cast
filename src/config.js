@@ -10,13 +10,14 @@ const defaultConfig = {
   beforeTypeCast: NO_OP,
   afterTypeCast: NO_OP,
   onTransformError: (error, propertyKey, value, transformFn, type) => {
+    // eslint-disable-next-line no-console
     console.warn(
       `Transform failed for ${type}.${propertyKey}:`,
       error.message,
       '\nFalling back to original value:',
       value
     );
-  }
+  },
 };
 
 const config = {};
