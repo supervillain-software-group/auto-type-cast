@@ -13,7 +13,6 @@ describe('Transform decorator', () => {
 
   it('transforms properties using the specified function', () => {
     @Register('Person')
-    // eslint-disable-next-line no-unused-vars
     class Person {
       @Transform((dateStr) => {
         const date = new Date(dateStr);
@@ -42,14 +41,12 @@ describe('Transform decorator', () => {
 
   it('handles nested objects with transformations', () => {
     @Register('Food')
-    // eslint-disable-next-line no-unused-vars
     class Food {
       @Transform((str) => str.toLowerCase())
       category;
     }
 
     @Register('Person')
-    // eslint-disable-next-line no-unused-vars
     class Person {
       foods;
     }
@@ -72,7 +69,6 @@ describe('Transform decorator', () => {
     let transformCalled = false;
 
     @Register('Person')
-    // eslint-disable-next-line no-unused-vars
     class Person {
       @Transform((value) => {
         transformCalled = true;
@@ -117,7 +113,6 @@ describe('Transform decorator', () => {
 
     it('preserves original value when transform fails', () => {
       @Register('User')
-      // eslint-disable-next-line no-unused-vars
       class User {
         @Transform(() => {
           throw new Error('Transform failed');
@@ -149,7 +144,6 @@ describe('Transform decorator', () => {
       };
 
       @Register('User')
-      // eslint-disable-next-line no-unused-vars
       class User {
         @Transform(() => {
           throw new Error('Transform failed');
@@ -180,7 +174,6 @@ describe('Transform decorator', () => {
       };
 
       @Register('User')
-      // eslint-disable-next-line no-unused-vars
       class User {
         @Transform(() => {
           throw new Error('Transform failed');
@@ -205,7 +198,6 @@ describe('Transform decorator', () => {
 
     it('continues type casting after transform error', () => {
       @Register('User')
-      // eslint-disable-next-line no-unused-vars
       class User {
         @Transform(() => {
           throw new Error('First transform failed');
