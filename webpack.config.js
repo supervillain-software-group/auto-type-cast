@@ -6,7 +6,7 @@ const outputFile = `${libraryName}.js`
 
 module.exports = {
   entry: {
-    app: './src/index.js'
+    app: './src/index.ts'
   },
   devtool: 'source-map',
   output: {
@@ -18,6 +18,7 @@ module.exports = {
     globalObject: 'this'
   },
   resolve: {
+    extensions: ['.ts', '.js'],
     alias: require('./aliases.config.js').webpack
   },
   devServer: {
@@ -38,17 +39,27 @@ module.exports = {
   },
   plugins: [
     new ESLintPlugin({
-      extensions: ['js'],
+      extensions: ['js', 'ts'],
       exclude: 'node_modules'
     })
   ],
   module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: /(node_modules)/,
-      use: [{
-        loader: 'babel-loader'
-      }]
-    }]
+    rules: [
+      {
+        test: /\.ts$/,
+        use: [
+          'babel-loader',
+          'ts-loader'
+        ],
+        exclude: /node_modules/
+      },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: [{
+          loader: 'babel-loader'
+        }]
+      }
+    ]
   }
 };
