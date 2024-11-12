@@ -102,13 +102,15 @@ describe('Transform decorator', () => {
   describe('error handling', () => {
     let errorHandlerCalled;
     let errorDetails;
-    const originalOnTransformError = config.onTransformError;
 
     beforeEach(() => {
       errorHandlerCalled = false;
       errorDetails = null;
-      // Reset to default error handler
-      config.onTransformError = originalOnTransformError;
+
+      config.onTransformError = (error, prop, value, fn, type) => {
+        errorHandlerCalled = true;
+        errorDetails = { error, prop, value, type };
+      };
     });
 
     it('preserves original value when transform fails', () => {
@@ -138,10 +140,6 @@ describe('Transform decorator', () => {
     });
 
     it('calls global error handler when transform fails', () => {
-      config.onTransformError = (error, prop, value, fn, type) => {
-        errorHandlerCalled = true;
-        errorDetails = { error, prop, value, type };
-      };
 
       @Register('User')
       class User {
