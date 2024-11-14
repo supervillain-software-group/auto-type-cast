@@ -43,6 +43,43 @@ _Does this function mutate the original objects?_ Yes, and it uses `setPrototype
 
 _Doesn't this mean I need to add an attribute to my JSON objects being sent from the server?_ Yes. This is simple enough for my use cases. If this does not fit for you, you should find a more complex framework. For example, [class-transformer](https://www.npmjs.com/package/class-transformer) is non-intrusive through use of type decorators.
 
+### TypeScript Support
+
+This library includes full TypeScript support while maintaining its simple, prototype-based transformation approach. A few important notes about types:
+
+1. The `autoTypeCast` function returns `unknown` by design:
+
+   ```typescript
+   function autoTypeCast(obj: unknown, options?: AutoTypeCastOptions): unknown;
+   ```
+
+   This is intentional because the function transforms objects by changing their prototypes at runtime. The return type being `unknown` correctly represents that the object's type changes during execution rather than at compile time.
+
+2. Typical Usage Pattern:
+   The library is designed to be used at a fundamental level in your application, such as in an axios interceptor:
+
+   ```typescript
+   axios.interceptors.response.use((response) => {
+     autoTypeCast(response.data);
+     return response;
+   });
+   ```
+
+   In this pattern, the `unknown` return type doesn't matter because:
+
+   - The underlying object is transformed in place
+   - Your type system already knows the expected type from your API definitions
+   - The object will have the correct prototype and all instance methods at runtime
+
+3. The decorators are fully typed:
+   ```typescript
+   @Register("Person")
+   class Person {
+     @Transform((value: string) => value.toUpperCase())
+     name: string;
+   }
+   ```
+
 ## Usage
 
 ### Installation
